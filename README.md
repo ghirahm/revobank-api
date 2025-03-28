@@ -143,5 +143,6 @@ GET /accounts/1
 
 ---
 
-Full Documentation of API is Available on
-Test of Applicaitons is on 
+Full Documentation of API is Available on [Postman](https://documenter.getpostman.com/view/28293786/2sAYkBrLvZ)
+
+Online API [REVOBANK API](http://http://202.10.42.159:5000/)
