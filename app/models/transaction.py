@@ -3,10 +3,14 @@ from datetime import datetime
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
-    type = db.Column(db.String(10), nullable=False)  # 'deposit', 'withdrawal', 'transfer'
+    type = db.Column(db.String(20), nullable=False)
     amount = db.Column(db.Float, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    from_account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=True)
+    to_account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=True)
+    description = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return f"<Transaction {self.type} - {self.amount}>"
+    # Relasi dengan Account
+    from_account = db.relationship("Account", foreign_keys=[from_account_id], backref="transactions_sent")
+    to_account = db.relationship("Account", foreign_keys=[to_account_id], backref="transactions_received")
+

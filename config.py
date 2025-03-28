@@ -1,3 +1,11 @@
-SQLALCHEMY_DATABASE_URI = 'sqlite:///revobank.db'
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-JWT_SECRET_KEY = 'super-secret-key'
+import os
+
+class Config:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'your_secret_key')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///revobank.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_size': 10,
+        'pool_recycle': 300,
+        'pool_pre_ping': True
+    }
