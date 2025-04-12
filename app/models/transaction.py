@@ -2,10 +2,12 @@ from app import db
 from datetime import datetime
 
 class Transaction(db.Model):
+    # __tablename__ = 'transaction'
+
     # Primary key for the transaction
     id = db.Column(db.Integer, primary_key=True)
 
-    # Type of transaction: e.g., 'deposit', 'withdrawal', 'transfer'
+    # Type of transaction: e.g., 'Deposit', 'Withdrawal', 'Transfer'
     type = db.Column(db.String(20), nullable=False)
 
     # Transaction amount, required

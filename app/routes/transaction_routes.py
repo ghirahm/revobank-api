@@ -11,6 +11,7 @@ from app.services.transaction_service import (
 
 transaction_bp = Blueprint('transaction', __name__)
 
+# Read Transaction Data
 @transaction_bp.route('/', methods=['GET'])
 def get_transactions():
     try:
@@ -21,6 +22,7 @@ def get_transactions():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
+# Read Transaction Data (Based on ID)
 @transaction_bp.route('/<int:id>', methods=['GET'])
 def get_transaction(id):
     try:
@@ -29,6 +31,7 @@ def get_transaction(id):
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
+# Create Transaction Data
 @transaction_bp.route('/', methods=['POST'])
 def create_transaction_route():
     try:
@@ -38,6 +41,7 @@ def create_transaction_route():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
+# Delete Transaction Data
 @transaction_bp.route('/<int:id>', methods=['DELETE'])
 def delete_transaction_route(id):
     try:

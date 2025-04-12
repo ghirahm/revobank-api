@@ -1,6 +1,8 @@
 from app import db
 
 class TransactionCategory(db.Model):
+    # __tablename__ = 'transaction_category'
+    
     # Primary key for the transaction category
     id = db.Column(db.Integer, primary_key=True)
 

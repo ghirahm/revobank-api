@@ -1,6 +1,8 @@
 from app import db
 
 class Budget(db.Model):
+    # __tablename__ = 'budget'
+
     # Primary key for the budget
     id = db.Column(db.Integer, primary_key=True)
 

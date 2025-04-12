@@ -6,6 +6,7 @@ from app.services.budget_service import create_budget, get_user_budgets, update_
 
 budgets_bp = Blueprint('budgets', __name__)
 
+# Create Budget Data
 @budgets_bp.route('/', methods=['POST'])
 @jwt_required()
 def post_budget():
@@ -14,6 +15,7 @@ def post_budget():
     budget = create_budget(user_id, data)
     return jsonify({'message': 'Budget created', 'budget_id': budget.id}), 201
 
+# Read Budget Data
 @budgets_bp.route('/', methods=['GET'])
 @jwt_required()
 def list_budgets():
@@ -27,6 +29,7 @@ def list_budgets():
         'end_date': b.end_date.isoformat()
     } for b in budgets])
 
+# Update Budget Data
 @budgets_bp.route('/<int:budget_id>', methods=['PUT'])
 @jwt_required()
 def put_budget(budget_id):

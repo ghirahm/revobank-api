@@ -4,6 +4,7 @@ from app.services.bill_service import create_bill, get_user_bills, update_bill, 
 
 bill_bp = Blueprint('bills', __name__)
 
+# Create Bill Data Based on User ID
 @bill_bp.route('/', methods=['POST'])
 @jwt_required()
 def post_bill():
@@ -12,6 +13,7 @@ def post_bill():
     bill = create_bill(user_id, data)
     return jsonify({'message': 'Bill scheduled', 'bill_id': bill.id}), 201
 
+# Read Bill Data
 @bill_bp.route('/', methods=['GET'])
 @jwt_required()
 def list_bills():
@@ -25,6 +27,7 @@ def list_bills():
         'account_id': b.account_id
     } for b in bills])
 
+# Update Bill Data
 @bill_bp.route('/<int:bill_id>', methods=['PUT'])
 @jwt_required()
 def put_bill(bill_id):
@@ -35,6 +38,7 @@ def put_bill(bill_id):
         return jsonify({'error': 'Bill not found'}), 404
     return jsonify({'message': 'Bill updated'})
 
+# Delete Bill Data
 @bill_bp.route('/<int:bill_id>', methods=['DELETE'])
 @jwt_required()
 def delete_bill_route(bill_id):

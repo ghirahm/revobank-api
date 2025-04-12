@@ -229,6 +229,4 @@ POST /transactions
 
 📘 **API Documentation**: [Postman Docs](https://documenter.getpostman.com/view/28293786/2sAYkBrLvZ)
 
-Full Documentation of API is Available on [Postman](https://documenter.getpostman.com/view/28293786/2sAYkBrLvZ)
-
-Online API [REVOBANK API](http://http://202.10.42.159:5000/)
+Online API [REVOBANK API](https://revobankapi.skycast.site/users/1)

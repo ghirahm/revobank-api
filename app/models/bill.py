@@ -1,6 +1,8 @@
 from app import db
 
 class Bill(db.Model):
+    # __tablename__ = 'bill'
+
     # Primary key for the bill record
     id = db.Column(db.Integer, primary_key=True)
 
