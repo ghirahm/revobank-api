@@ -26,11 +26,11 @@ def create_user(data):
         db.session.rollback()
         return {'error': 'Failed to create user', 'details': str(e)}, 500
 
-def get_user(id):
-    current_user_id = get_jwt_identity()  # Get the logged-in user's ID from JWT
-    
+def get_user(id, user_id):
     # Ensure that the current user can only access their own data
-    if current_user_id != id:
+
+    print (user_id)
+    if int(user_id) != id:
         return {'error': 'Unauthorized access to this user\'s data'}, 403
 
     user = User.query.get_or_404(id)
@@ -42,11 +42,9 @@ def get_user(id):
         'updated_at': user.updated_at.strftime('%Y-%m-%d %H:%M:%S')
     }, 200
 
-def update_user(id, data):
-    current_user_id = get_jwt_identity()  # Get the logged-in user's ID from JWT
-
+def update_user(id, user_id, data):
     # Ensure that the current user can only update their own data
-    if current_user_id != id:
+    if int(user_id) != id:
         return {'error': 'Unauthorized access to update this user\'s data'}, 403
 
     user = User.query.get_or_404(id)
@@ -62,14 +60,12 @@ def update_user(id, data):
         db.session.rollback()
         return {'error': 'Failed to update user', 'details': str(e)}, 500
 
-def delete_user(user_id):
-    current_user_id = get_jwt_identity()
-
+def delete_user(id, user_id):
     # Ensure that the current user can only delete their own data
-    if current_user_id != user_id:
+    if int(user_id) != id:
         return {"error": "Unauthorized access to delete this user"}, 403
 
-    user = User.query.get(user_id)
+    user = User.query.get(id)
     if not user:
         return {"error": "User not found"}, 404
 
