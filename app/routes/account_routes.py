@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.account_service import (
     get_all_accounts,
     get_account_by_id,
@@ -10,21 +11,31 @@ from app.services.account_service import (
 account_bp = Blueprint('account', __name__)
 
 @account_bp.route('/', methods=['GET'])
+@jwt_required()
 def get_accounts():
-    return get_all_accounts()
+    user_id = get_jwt_identity()
+    return get_all_accounts(user_id)
 
 @account_bp.route('/<int:id>', methods=['GET'])
+@jwt_required()
 def get_account(id):
-    return get_account_by_id(id)
+    user_id = get_jwt_identity()
+    return get_account_by_id(user_id, id)
 
 @account_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_account():
-    return create_new_account()
+    user_id = get_jwt_identity()
+    return create_new_account(user_id)
 
 @account_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_account(id):
-    return update_existing_account(id)
+    user_id = get_jwt_identity()
+    return update_existing_account(user_id, id)
 
 @account_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_account(id):
-    return delete_existing_account(id)
+    user_id = get_jwt_identity()
+    return delete_existing_account(user_id, id)

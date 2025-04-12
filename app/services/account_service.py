@@ -5,15 +5,14 @@ from app import db
 def format_datetime(value):
     return value.strftime('%Y-%m-%d %H:%M:%S') if value else None
 
-def get_all_accounts():
+def get_all_accounts(user_id):
     try:
-        accounts = Account.query.all()
+        accounts = Account.query.filter_by(user_id=user_id).all()
         if not accounts:
             return jsonify({'message': 'No accounts found'}), 404
         return jsonify([
             {
                 'id': acc.id,
-                'user_id': acc.user_id,
                 'account_type': acc.account_type,
                 'account_number': acc.account_number,
                 'balance': float(acc.balance),
@@ -24,12 +23,14 @@ def get_all_accounts():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
-def get_account_by_id(id):
+def get_account_by_id(user_id, id):
     try:
-        account = Account.query.get_or_404(id)
+        account = Account.query.filter_by(id=id, user_id=user_id).first()
+        if not account:
+            return jsonify({'error': 'Account not found'}), 404
+
         return jsonify({
             'id': account.id,
-            'user_id': account.user_id,
             'account_type': account.account_type,
             'account_number': account.account_number,
             'balance': float(account.balance),
@@ -39,16 +40,16 @@ def get_account_by_id(id):
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
-def create_new_account():
+def create_new_account(user_id):
     try:
         data = request.json
-        required_fields = ('user_id', 'account_type', 'account_number')
+        required_fields = ('account_type', 'account_number')
 
         if not all(field in data for field in required_fields):
             return jsonify({'error': 'Missing required fields'}), 400
 
         new_account = Account(
-            user_id=data['user_id'],
+            user_id=user_id,
             account_type=data['account_type'],
             account_number=data['account_number'],
             balance=data.get('balance', 0.00)
@@ -61,9 +62,12 @@ def create_new_account():
         db.session.rollback()
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
-def update_existing_account(id):
+def update_existing_account(user_id, id):
     try:
-        account = Account.query.get_or_404(id)
+        account = Account.query.filter_by(id=id, user_id=user_id).first()
+        if not account:
+            return jsonify({'error': 'Account not found'}), 404
+
         data = request.json
 
         account.account_type = data.get('account_type', account.account_type)
@@ -76,9 +80,12 @@ def update_existing_account(id):
         db.session.rollback()
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
-def delete_existing_account(id):
+def delete_existing_account(user_id, id):
     try:
-        account = Account.query.get_or_404(id)
+        account = Account.query.filter_by(id=id, user_id=user_id).first()
+        if not account:
+            return jsonify({'error': 'Account not found'}), 404
+
         db.session.delete(account)
         db.session.commit()
         return jsonify({'message': 'Account deleted successfully'}), 200

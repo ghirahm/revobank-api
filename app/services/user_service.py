@@ -2,6 +2,7 @@ from app.models import User
 from app import db
 from werkzeug.security import generate_password_hash
 from datetime import datetime
+from flask_jwt_extended import get_jwt_identity
 
 def create_user(data):
     required_fields = ('username', 'email', 'password')
@@ -26,6 +27,12 @@ def create_user(data):
         return {'error': 'Failed to create user', 'details': str(e)}, 500
 
 def get_user(id):
+    current_user_id = get_jwt_identity()  # Get the logged-in user's ID from JWT
+    
+    # Ensure that the current user can only access their own data
+    if current_user_id != id:
+        return {'error': 'Unauthorized access to this user\'s data'}, 403
+
     user = User.query.get_or_404(id)
     return {
         'id': user.id,
@@ -36,6 +43,12 @@ def get_user(id):
     }, 200
 
 def update_user(id, data):
+    current_user_id = get_jwt_identity()  # Get the logged-in user's ID from JWT
+
+    # Ensure that the current user can only update their own data
+    if current_user_id != id:
+        return {'error': 'Unauthorized access to update this user\'s data'}, 403
+
     user = User.query.get_or_404(id)
 
     user.username = data.get('username', user.username)
@@ -50,6 +63,12 @@ def update_user(id, data):
         return {'error': 'Failed to update user', 'details': str(e)}, 500
 
 def delete_user(user_id):
+    current_user_id = get_jwt_identity()
+
+    # Ensure that the current user can only delete their own data
+    if current_user_id != user_id:
+        return {"error": "Unauthorized access to delete this user"}, 403
+
     user = User.query.get(user_id)
     if not user:
         return {"error": "User not found"}, 404

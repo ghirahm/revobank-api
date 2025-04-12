@@ -9,3 +9,5 @@ class Config:
         'pool_recycle': 300,
         'pool_pre_ping': True
     }
+
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'your_jwt_secret_key')

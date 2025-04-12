@@ -1,4 +1,7 @@
 from flask import Blueprint, request, jsonify
+
+from flask_jwt_extended import jwt_required
+
 from app.services.transaction_service import (
     get_all_transactions,
     get_transaction_by_id,
